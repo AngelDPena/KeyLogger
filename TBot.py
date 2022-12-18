@@ -1,8 +1,8 @@
 import telebot
-import variables
+import variables as v
 
-bot = telebot.TeleBot(variables.TOKEN)
-path = variables.ChatIDPath
+bot = telebot.TeleBot(v.TOKEN)
+path = v.ChatIDPath
 global ID
 
 
